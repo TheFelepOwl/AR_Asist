@@ -144,6 +144,42 @@ public interface IHealth
 }
 
 
+public class Health : IHealth
+{
+    public int pulse { get; set; }
+    public float temperature { get; set; }
+    public int blood_oxygen_level { get; set; }
+    public int stress_level { get; set; }
+
+    public void record_pulse(int pulse_value)
+    {
+        // Логіка запису пульсу
+        pulse = pulse_value;
+        
+    }
+
+    public void record_temperature(float temperature_value)
+    {
+        // Логіка запису температури
+        temperature = temperature_value;
+        
+    }
+
+    public void record_blood_oxygen_level(int oxygen_level)
+    {
+        // Логіка запису рівня кисню в крові
+        blood_oxygen_level = oxygen_level;
+        
+    }
+
+    public void record_stress_level(int stress_level)
+    {
+        // Логіка запису рівня стресу
+        this.stress_level = stress_level;
+    }
+}
+
+
 public class FitnessTracker
 {
     public int daily_steps { get; set; }
