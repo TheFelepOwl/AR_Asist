@@ -135,62 +135,67 @@ public class Route
         return "";
     }
 }
-
-public class Health
+public interface IHealth
 {
-    public int pulse { get; set; }
-    public float temperature { get; set; }
-    public int blood_oxygen_level { get; set; }
-    public int stress_level { get; set; }
+    void record_pulse(int pulse_value);
+    void record_temperature(float temperature_value);
+    void record_blood_oxygen_level(int oxygen_level);
+    void record_stress_level(int stress_level);
+}
+
+// Клас FitnessTracker, який ми хочемо адаптувати
+public class FitnessTracker
+{
+    public int daily_steps { get; set; }
+    public int calories_burned { get; set; }
+    public int pulse { get; private set; } // Додали властивість для зберігання пульсу
 
     public void record_pulse(int pulse_value)
     {
+        pulse = pulse_value; // Записуємо значення пульсу
+    }
+
+    public int getCurrentPulse() // Метод для отримання поточного значення пульсу
+    {
+        return pulse;
     }
 
     public void record_temperature(float temperature_value)
     {
+        // Логіка запису температури
+    }
+
+    // Додаткові методи та властивості класу FitnessTracker
+}
+
+// Адаптер для FitnessTracker, який реалізує інтерфейс IHealth
+public class FitnessTrackerAdapter : IHealth
+{
+    private FitnessTracker fitnessTracker;
+
+    public FitnessTrackerAdapter(FitnessTracker tracker)
+    {
+        fitnessTracker = tracker;
+    }
+
+    public void record_pulse(int pulse_value)
+    {
+        fitnessTracker.record_pulse(pulse_value);
+    }
+
+    public void record_temperature(float temperature_value)
+    {
+        fitnessTracker.record_temperature(temperature_value);
     }
 
     public void record_blood_oxygen_level(int oxygen_level)
     {
+        // Додаткові логіка тут, якщо потрібно
     }
 
     public void record_stress_level(int stress_level)
     {
-    }
-}
-
-public class FitnessTracker : Health
-{
-    public int daily_steps { get; set; }
-    public int calories_burned { get; set; }
-    public List<string> workout_sessions { get; set; }
-
-    public void track_steps(int steps)
-    {
-
-    }
-
-    public void track_calories_burned(int calories)
-    {
-
-    }
-
-    public void add_workout_session(string session, int pulse, float temperature)
-    {
-        workout_sessions.Add(session);
-
-        record_pulse(pulse);
-    }
-    public List<string> retrieve_workout_sessions()
-    {
-
-        return workout_sessions;
-    }
-
-    public void analyze_workouts()
-    {
-
+        // Додаткові логіка тут, якщо потрібно
     }
 }
 
@@ -211,5 +216,25 @@ class Program
 
         // Закриття програми
         menu.shutdown();
+
+
+        // Створення екземпляру класу FitnessTracker
+        FitnessTracker fitnessTracker = new FitnessTracker();
+
+        // Створення адаптера для FitnessTracker
+        IHealth healthAdapter = new FitnessTrackerAdapter(fitnessTracker);
+
+        // Запис даних про пульс за допомогою адаптера
+        healthAdapter.record_pulse(80);
+
+        // Запис температури за допомогою адаптера
+        healthAdapter.record_temperature(37.5f);
+
+        int currentPulse = fitnessTracker.getCurrentPulse();
+
+        // Виведення поточного пульсу у консоль
+        Console.WriteLine("Current pulse: " + currentPulse);
+
+
     }
 }
