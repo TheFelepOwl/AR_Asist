@@ -143,16 +143,18 @@ public interface IHealth
     void record_stress_level(int stress_level);
 }
 
-// Клас FitnessTracker, який ми хочемо адаптувати
+
 public class FitnessTracker
 {
     public int daily_steps { get; set; }
     public int calories_burned { get; set; }
-    public int pulse { get; private set; } // Додали властивість для зберігання пульсу
+    public int pulse { get; private set; }
+    public float temperatur {  get; set; }
+
 
     public void record_pulse(int pulse_value)
     {
-        pulse = pulse_value; // Записуємо значення пульсу
+        pulse = pulse_value; 
     }
 
     public int getCurrentPulse() // Метод для отримання поточного значення пульсу
@@ -162,10 +164,15 @@ public class FitnessTracker
 
     public void record_temperature(float temperature_value)
     {
-        // Логіка запису температури
+        temperatur = temperature_value;
     }
 
-    // Додаткові методи та властивості класу FitnessTracker
+    public float getCurrentTemperatur() // Метод для отримання поточного значення температури
+    {
+        return temperatur;
+    }
+
+
 }
 
 // Адаптер для FitnessTracker, який реалізує інтерфейс IHealth
@@ -190,12 +197,12 @@ public class FitnessTrackerAdapter : IHealth
 
     public void record_blood_oxygen_level(int oxygen_level)
     {
-        // Додаткові логіка тут, якщо потрібно
+        
     }
 
     public void record_stress_level(int stress_level)
     {
-        // Додаткові логіка тут, якщо потрібно
+        
     }
 }
 
@@ -218,7 +225,6 @@ class Program
         menu.shutdown();
 
 
-        // Створення екземпляру класу FitnessTracker
         FitnessTracker fitnessTracker = new FitnessTracker();
 
         // Створення адаптера для FitnessTracker
@@ -231,9 +237,11 @@ class Program
         healthAdapter.record_temperature(37.5f);
 
         int currentPulse = fitnessTracker.getCurrentPulse();
+        float currentTemperature = fitnessTracker.getCurrentTemperatur();
 
-        // Виведення поточного пульсу у консоль
+        
         Console.WriteLine("Current pulse: " + currentPulse);
+        Console.WriteLine("Current temperature: " + currentTemperature + "°С");
 
 
     }
